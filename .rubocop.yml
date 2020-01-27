@@ -1,0 +1,13 @@
+inherit_gem:
+  rubocop-rails_config:
+    - config/rails.yml
+
+AllCops:
+  TargetRubyVersion: 2.5.7
+  Exclude:
+    - 'db/**/*'
+    - 'tmp/**/*'
+    - 'bin/**/*'
+
+Layout/LineLength:
+  Max: 120

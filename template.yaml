@@ -78,6 +78,18 @@ Resources:
           RAILS_ENV: !Ref RailsEnv
       FunctionName: !Join [ '', [ 'RailsTodoServerless-', !Ref RailsEnv, '-', !Ref 'AWS::Region' ] ]
       AutoPublishAlias: live
+      Policies:
+        - Version: "2012-10-17"
+          Statement:
+            - Effect: Allow
+              Action:
+                - ssm:GetParameter
+                - ssm:GetParameters
+                - ssm:GetParametersByPath
+                - ssm:GetParameterHistory
+              Resource:
+                - !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/config/my_awesome_lambda/*
+
 
 Outputs:
 

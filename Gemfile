@@ -15,6 +15,7 @@ gem "pg", ">= 0.18", "< 2.0"
 # gem 'bcrypt', '~> 3.1.7'
 gem "lamby", require: false
 gem "aws-sdk-ssm"
+gem "devise_token_auth"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'

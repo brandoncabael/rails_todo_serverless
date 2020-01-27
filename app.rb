@@ -2,6 +2,8 @@
 
 require_relative "config/boot"
 require "lamby"
+ENV["RAILS_MASTER_KEY"] =
+  Lamby::SsmParameterStore.get!("/config/my_awesome_lambda/env/RAILS_MASTER_KEY")
 require_relative "config/application"
 require_relative "config/environment"
 

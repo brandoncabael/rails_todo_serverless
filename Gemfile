@@ -32,9 +32,16 @@ group :development, :test do
   gem "brakeman", require: false
   gem "bundler-audit", require: false
   gem "factory_bot_rails"
+  gem "faker", github: "faker-ruby/faker", branch: "master"
+  gem "database_cleaner"
 end
 
 group :development do
+  gem "awesome_print"
+end
+
+group :test do
+  gem "shoulda-matchers"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

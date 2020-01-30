@@ -58,7 +58,7 @@ end
 
 def content_headers
   {
-    'CONTENT-TYPE' => 'application/json',
-    'ACCEPT' => 'application/json'
+    "CONTENT-TYPE" => "application/json",
+    "ACCEPT" => "application/json"
   }
 end

@@ -1,47 +1,64 @@
 # frozen_string_literal: true
 
-# I've called it authentication_test_spec.rb and placed it in the spec/requests folder
 require "rails_helper"
 include ActionController::RespondWith
 
-describe "Whether access is ocurring properly", type: :request do
-  before(:each) do
-    @current_user = FactoryBot.create(:user)
-  end
-
-  context "context: general authentication via API, " do
-    it "gives you an authentication code if you are an existing user and you satisfy the password" do
-      login
-      # puts "#{response.headers.inspect}"
-      # puts "#{response.body.inspect}"
-      expect(response.has_header?("access-token")).to eq(true)
-    end
-
-    it "gives you a status 200 on signing in " do
-      login
+describe "testing authentication system", type: :request do
+  context "user registration" do
+    it "allows user to register" do
+      post "/v1/auth", params: registration_params.to_json, headers: content_headers
       expect(response.status).to eq(200)
     end
+
+    it "doesn't allow user to register without required params" do
+      invalid_reg_params = registration_params[:password_confirmation] = nil
+      post "/v1/auth", params: invalid_reg_params.to_json, headers: content_headers
+      expect(response.status).to eq(422)
+    end
+
+    it "doesn't allow user to register with incorrect password confirmation" do
+      invalid_reg_params = registration_params[:password_conirmation] = "invalid"
+      post "/v1/auth", params: invalid_reg_params.to_json, headers: content_headers
+      expect(response.status).to eq(422)
+    end
   end
 
-  def login
-    post user_session_path, params: { email: @current_user.email, password: @current_user.email }.to_json,
-      headers: { "CONTENT_TYPE" => "application/json", "ACCEPT" => "application/json" }
-  end
+  context "user login" do
+    before(:each) do
+      @user = FactoryBot.create(:user)
+    end
 
-  def get_auth_params_from_login_response_headers(response)
-    client = response.headers["client"]
-    token = response.headers["access-token"]
-    expiry = response.headers["expiry"]
-    token_type = response.headers["token-type"]
-    uid = response.headers["uid"]
+    it "allows user to login with correct credentials" do
+      login_params = {
+        email: @user.email,
+        password: @user.email
+      }
+      post v1_user_session_path, params: login_params.to_json, headers: content_headers
+      expect(response.status).to eq(200)
+    end
 
-    auth_params = {
-      "access-token" => token,
-      "client" => client,
-      "uid" => uid,
-      "expiry" => expiry,
-      "token_type" => token_type
-    }
-    auth_params
+    it "doesn't allow user to login with incorrect credentials" do
+      login_params = {
+        email: @user.email,
+        password: "password"
+      }
+      post v1_user_session_path, params: login_params.to_json, headers: content_headers
+      expect(response.status).to eq(401)
+    end
   end
+end
+
+def registration_params
+  {
+    email: "test@test.com",
+    password: "password",
+    password_confirmation: "password"
+  }
+end
+
+def content_headers
+  {
+    'CONTENT-TYPE' => 'application/json',
+    'ACCEPT' => 'application/json'
+  }
 end

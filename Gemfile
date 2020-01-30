@@ -38,6 +38,7 @@ end
 
 group :development do
   gem "awesome_print"
+  gem "guard-rspec", require: false
 end
 
 group :test do

@@ -9,5 +9,5 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
   include DeviseTokenAuth::Concerns::User
 
-  validates_presence_of :provider, :uid, :encrypted_password, :email
+  validates_presence_of :provider, :encrypted_password, :email
 end

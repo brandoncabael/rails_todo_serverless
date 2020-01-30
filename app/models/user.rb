@@ -2,6 +2,7 @@
 
 # Base class for Users
 class User < ApplicationRecord
+  rolify
   extend Devise::Models
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
